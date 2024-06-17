@@ -78,3 +78,39 @@
 3. 세번째 인자
     - 일단 얘는 0을 쓴다고 알고 있자
 
+- bind 함수
+``` c
+    int bind(int sockfd, struct sockaddr *myaddr, socklen_t addrlen);
+    // 성공 0 실패 -1
+    // 생성된 소켓에 IP와 Port정보 할당
+```
+
+1. 첫번째 인자에는 소켓을 만들때 그 파일디스크립터값을 담은 변수가 들어간다.
+2. 두번째 인자
+    - 함수 호출 전 sockaddr 구조체의 멤버를 각각 초기화 해준 후 인자로 넣어준다.
+``` c
+    struct sockaddr_in
+    {
+        sa_family_t sin_family; // 주소체계: 보통 IPv4를 의미하는 PF_INET을 많이 쓰는것 같다
+        unint16_t sin_port; // 16비트 Port번호
+        struct in_addr sin_addr; // 32비트 IP주소: 구조체의 멤버로 가지고있는 구조체의 멤버에다 넣어 준다.
+        char sin_zero[8]; // 사용x
+    }
+
+    struct in_addr
+    {
+        in_addr_t s_addr; // 32비트 Ipv4 인터넷 주소
+    }
+```
+3. 세번째 인자로는 구조체의 크기를 넣어준다. 보통 sizeof()를 쓴다
+
+
+``` c
+    //사용 예시
+    memset(&servAddr, 0, sizeof(servAddr)); 
+    servAddr.sin_family = AF_INET; // IPv4 쓰겠다
+    servAddr.sin_addr.s_addr = inet_addr(argv[1]); // 입력받은 IP로 초기화 하는 모습
+    servAddr.sin_port = htons(atoi(argv[2])); // 입력받은 Port번호 문자열을 정수형을 바꾼후 빅엔디안으로 쓰겠다는것 같음!
+```
+
+## 3일차
