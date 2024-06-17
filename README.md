@@ -64,7 +64,7 @@
     // 1. domain : 프로토콜 체계
     // 2. type : 소켓의 타입
     // 3.. protocol : 0    
-    ```
+```
 1. 첫번째 인자 : 프로토콜 체계
     - 다양하지만 PF_INET와 PF_INET6만 알아두자
     - PF_INET은 IPv4를 의미하고 PF_INET6는 IPv6다.
