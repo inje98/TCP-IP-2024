@@ -114,3 +114,22 @@
 ```
 
 ## 3일차
+- listen 함수
+``` c
+    int listen(int sockfd, int backlog)
+    // 성공 0 실패 -1
+    // 클라이언트에서 연결요청을 할 수 있는 상태가 되게한다.
+```
+
+- bind 함수를 통해서 소켓에 주소까지 할당 했다면 , listen 함수를 통새 연결요청 대기상태로 들아간다.
+- listen을 호출하면 클라이언트쪽에서 connect를 통해 연결 요청을 할 수 있다
+- 두번째 인자는 클라이언트 대기큐 수이다.
+
+- accept 함수
+ ``` c
+    int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+    //성공 파일디스크립터, 실패 -1
+    //  연결요청에 대한 수락을 의미. accept함수를 통새서 요청을 수락한다.
+```
+- accept 함수는 '연결요청 대기 큐에서 대기중인 클라이언트의 연결 요청을 수락하는 기능의 함수이다. 
+- 데이터의 입출력에 사용할 소켓을 생성(clnt_sock변수), 이 소켓과 클라이언트와 소통한다.
