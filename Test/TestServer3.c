@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#define BUF_SIZE 30
+#define BUF_SIZE 1024
 
 void error_handling(char *message);
 
@@ -28,8 +28,6 @@ int main(int argc, char *argv[])
 	struct sockaddr_in clnt_addr;
 	socklen_t clnt_addr_size;
 
-	char message[]="Hello Worlde!";
-
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 	if (serv_sock == -1)
 		error_handling("socket() error");
@@ -49,7 +47,20 @@ int main(int argc, char *argv[])
 
 	while(1)
 	{
-		printf("Waiting for
+		printf("Waiting for connections ...\n");
+
+		clnt_sock = accept(serv_sock,(struct sockaddr*)&clnt_addr, &clnt_addr_size);
+		if(clnt_sock == -1)
+			error_handling("accept error");
+
+		read(clnt_sock, buf, sizeof(buf));
+		printf("Received requewt: \n%s\n", buf);
+
+		if(strncmp(buf, "GET", 3) == 0)
+		{
+			write(clnt_sock, webpage, sizeof(webpage)-1);
+		}
+		close(clnt_sock);
 	}
 	close(serv_sock);
 	return 0;

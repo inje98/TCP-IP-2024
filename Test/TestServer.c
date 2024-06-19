@@ -14,7 +14,7 @@ char webpage[] =
     "<html><head><title>My Web Page</title>\r\n"
     "<style>body {background-color: #FFFF00; }</style></head>\r\n"
     "<body><center><h1>Hello world!!</h1><br>\r\n"
-    "<img src=\"game.jpg\"></center></body></html>\r\n";
+    "<img src=\"cat.jpg\"></center></body></html>\r\n";
 
 int main() {
     int server_fd, new_socket;
