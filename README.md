@@ -150,7 +150,60 @@
         // 성공0, 실패-1
         ```
         - 두번째 인자(howto)
-            1. SHUT_RD
-            2. SHUT_WR
-            3. SHUT_RDWR
+            1. SHUT_RD  -> 입력 스트림 종료
+            2. SHUT_WR -> 출력 스트림 종료
+            3. SHUT_RDWR -> 입출력 스트림 종료
 
+- DNS Server
+    - IP주소와 도메인 이름 사이에서의 변환을 수행하는 시스템
+- 소켓의 옵션
+    - SOL_SOCKET
+    - IPPROTO_IP
+    - IPPROTO_TCP
+
+## 5일차
+- 다중접속 서버의 구현 방법
+    1. 멀티프로세스 기반 서버 : 다수의 프로세스를 생성하는 방식으로 서비스 제공
+    2. 멀티플렉싱 기반 서버 : 입출력 대상을 묶어서 관리하는 방식으로 서비스 제공
+    3. 멀티쓰레딩 기반 서버 : 클라이언트 수만큼 쓰레드를 생성하는 방식으로 서비스 제공
+
+- 멀티프로세스 기반 서버
+    - 프로세스의 이해
+        - 메모리 공간을 차지한 상태에서 실행중인 프로그램
+    
+    - fork 함수
+    ``` c
+        pid_t fork(void)
+        // 성공 프로세스ID, 실패 -1
+    ```
+- fork 함수는 호출한 프로세스의 복사본을 생성
+    - 부모 프로세스는 fork 함수의 반환값이 자식프로세스의 ID
+    - 자식 프로세스는 fork 함수의 반환값이 0
+- 좀비 프로세스
+    - 프로세스가 생성되고 나서 할일을 다하면 사라져야 하는데 사라지지 않고 좀비가 되어 시스템의 중요한 리소스를 차지하기도 한다.
+    - 해당 자식 프로세스를 생성한 부모 프로세스에게 exit 함수나 인자값이 return문의 반환값이 전달 되어야 한다
+- 좀비 소멸
+    - wait함수
+    ``` c
+        pid_t wait(int * statloc);
+        // statloc에는 자식이 죽으면서 전달한값
+
+        pid_t waitpid(pid_t pid, int * statloc, int options);
+        // 성공 종료된 자식 프로세스의 ID, 실패 -1
+    ```
+
+- 시그널 함수
+    ``` c
+        void (*signal(int signo, void (*func)(int)))(int);
+        /// 시그널 발생 시 호출되도록 이전에 등록된 함수의 포인터 반환    
+    ```
+
+    - signal(SIGCHLE, mychild);
+        - SIGCHLD(자식프로세스가 종료된 상황) 이 상황에서 mychild 이 함수를 호출(like 이벤트핸들러)
+
+- 멀티플렉싱
+    - 하나의 통신채널을 통해서 둘 이상의 데이터를 전송하는데 사용되는 기술
+    ``` c
+        int select(int maxfd, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval * timeout);
+        //성공 0, 실패 -1
+    ```
